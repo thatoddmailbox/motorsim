@@ -7,7 +7,7 @@ export default class VectorPlane {
 		const direction = new Vector3(to.x, to.y, to.z).sub(from).normalize();
 		const distance = to.distanceTo(from);
 
-		const arrowLength = 1;
+		const arrowLength = 0.8;
 		const arrowSpace = 0.1;
 
 		const arrowCount = Math.floor(distance / (arrowLength + arrowSpace));

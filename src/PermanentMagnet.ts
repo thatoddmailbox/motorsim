@@ -15,7 +15,7 @@ export default class PermanentMagnet {
 		const height = 1;
 		const depth = 0.75;
 
-		const poleDistance = 5;
+		const poleDistance = 4;
 		const centerOffset = height / 2;
 
 		const poleGeometry = new BoxGeometry(width, height, depth);

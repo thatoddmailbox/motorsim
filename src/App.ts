@@ -49,7 +49,7 @@ export default class App {
 		
 		// light
 		this.light = new DirectionalLight(COLOR_WHITE, 1);
-		this.light.position.set(0, 5, 10);
+		this.light.position.set(5, 5, 10);
 		this.light.target.position.set(0, 2, 0);
 		this.light.castShadow = true;
 		this.scene.add(this.light);
@@ -77,8 +77,8 @@ export default class App {
 		this.motor = new Motor(new Vector3(0, 0, 0), this.scene);
 
 		// move camera back
-		this.camera.position.x = 4;
-		this.camera.position.y = 5;
+		this.camera.position.x = 5;
+		this.camera.position.y = 7;
 		this.camera.position.z = 17.5;
 		this.camera.lookAt(0, 2, 0);
 		this.controls.update();
