@@ -1,6 +1,6 @@
 import {
 	AmbientLight,
-	BoxGeometry,
+	BoxBufferGeometry,
 	CameraHelper,
 	DirectionalLight,
 	DirectionalLightHelper,
@@ -17,7 +17,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 import { COLOR_PLATFORM, COLOR_WHITE } from "consts.ts";
 
-import PermanentMagnet from "PermanentMagnet.ts";
+import Motor from "Motor.ts";
 
 export default class App {
 	renderer: WebGLRenderer;
@@ -28,7 +28,7 @@ export default class App {
 
 	light: DirectionalLight;
 
-	magnet: PermanentMagnet;
+	motor: Motor;
 
 	constructor(canvas: HTMLCanvasElement) {
 		var canvasWidth = canvas.width;
@@ -68,14 +68,13 @@ export default class App {
 		// this.scene.add(cameraHelper);
 
 		// base platform
-		var geometry = new BoxGeometry(15, 0.5, 7.5);
+		var geometry = new BoxBufferGeometry(15, 0.5, 7.5);
 		var material = new MeshLambertMaterial({ color: COLOR_PLATFORM });
 		var platform = new Mesh(geometry, material);
 		platform.receiveShadow = true;
 		this.scene.add(platform);
 
-		// permanent magnet
-		this.magnet = new PermanentMagnet(new Vector3(0, 0, 0), this.scene);
+		this.motor = new Motor(new Vector3(0, 0, 0), this.scene);
 
 		// move camera back
 		this.camera.position.x = 4;
@@ -87,6 +86,8 @@ export default class App {
 	}
 
 	update() {
+		this.motor.update();
+
 		this.controls.update();
 	}
 

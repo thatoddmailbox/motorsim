@@ -10,11 +10,15 @@ export default class PermanentMagnet {
 	vectorPlane: VectorPlane;
 
 	constructor(position: Vector3, scene: Scene) {
-		const width = 1;
-		const height = 2.5;
+		// pole size parameters
+		const width = 2;
+		const height = 1;
+		const depth = 0.75;
+
+		const poleDistance = 5;
 		const centerOffset = height / 2;
 
-		const poleGeometry = new BoxGeometry(width, height, 1);
+		const poleGeometry = new BoxGeometry(width, height, depth);
 
 		/*
 		 * poles
@@ -27,8 +31,8 @@ export default class PermanentMagnet {
 		this.northPole.castShadow = true;
 		this.southPole.castShadow = true;
 
-		this.northPole.position.set(position.x + 3, position.y + centerOffset, position.z);
-		this.southPole.position.set(position.x - 3, position.y + centerOffset, position.z);
+		this.northPole.position.set(position.x, position.y + centerOffset + poleDistance, position.z);
+		this.southPole.position.set(position.x, position.y + centerOffset, position.z);
 
 		scene.add(this.northPole);
 		scene.add(this.southPole);
@@ -37,10 +41,10 @@ export default class PermanentMagnet {
 		 * vector field
 		 */
 		this.vectorPlane = new VectorPlane(
-			new Vector3(this.northPole.position.x - (width / 2), this.northPole.position.y, this.northPole.position.z),
-			new Vector3(this.southPole.position.x + (width / 2), this.southPole.position.y, this.southPole.position.z),
-			height,
-			new Vector3(0, 1, 0), // TODO: hardcoded
+			new Vector3(this.northPole.position.x, this.northPole.position.y - centerOffset, this.northPole.position.z),
+			new Vector3(this.southPole.position.x, this.southPole.position.y + centerOffset, this.southPole.position.z),
+			width,
+			new Vector3(1, 0, 0), // TODO: hardcoded
 			COLOR_FIELD_MAGNETIC,
 			scene
 		);
