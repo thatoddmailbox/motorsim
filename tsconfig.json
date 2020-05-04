@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"outDir": "./dist",
+		"target": "es5",
+		"module": "commonjs",
+		"removeComments": true,
+		"sourceMap": true,
+		"baseUrl": ".",
+		"paths": {
+			"*": [
+				"*",
+				"src/*"
+			]
+		}
+	}
+}
