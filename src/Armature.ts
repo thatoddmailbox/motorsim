@@ -63,7 +63,11 @@ export default class Armature {
 		scene.add(this.curveObject);
 	}
 
+	setAngle(angle: number) {
+		this.curveObject.rotation.set(angle, 0, 0);
+	}
+
 	update() {
-		// this.curveObject.rotation.set(this.curveObject.rotation.x + 2 * (Math.PI / 180), 0, 0);
+
 	}
 };
