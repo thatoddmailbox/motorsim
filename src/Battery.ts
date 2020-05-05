@@ -4,11 +4,7 @@ import { COLOR_BATTERY } from "consts.ts";
 import { addVectors } from "utils.ts";
 
 export default class Battery {
-	voltage: number;
-
-	constructor(startVoltage: number, position: Vector3, scene: Scene) {
-		this.voltage = startVoltage;
-
+	constructor(position: Vector3, scene: Scene) {
 		const radius = 0.4;
 		const length = 2.75;
 

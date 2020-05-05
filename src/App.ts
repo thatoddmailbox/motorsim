@@ -74,7 +74,11 @@ export default class App {
 		platform.receiveShadow = true;
 		this.scene.add(platform);
 
-		this.motor = new Motor(new Vector3(0, 0, 0), this.scene);
+		this.motor = new Motor({
+			batteryVoltage: 2,
+			armatureResistance: 100,
+			statorFieldStrength: 1
+		},new Vector3(0, 0, 0), this.scene);
 
 		// move camera back
 		this.camera.position.x = 5;
