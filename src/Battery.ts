@@ -13,7 +13,7 @@ export default class Battery {
 		const material = new MeshLambertMaterial({ color: COLOR_BATTERY });
 
 		const mesh = new Mesh(geometry, material);
-		mesh.position.copy(addVectors(position, new Vector3(0, radius*2 - 0.15, 0)));
+		mesh.position.copy(addVectors(position, new Vector3(0, radius, 0)));
 		scene.add(mesh);
 	}
 };

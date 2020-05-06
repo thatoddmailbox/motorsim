@@ -12,7 +12,7 @@ export default class PermanentMagnet {
 	constructor(position: Vector3, scene: Scene) {
 		// pole size parameters
 		const width = 2;
-		const height = 1;
+		const height = 0.75;
 		const depth = 0.75;
 
 		const poleDistance = 4;

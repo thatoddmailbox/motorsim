@@ -78,7 +78,7 @@ export default class App {
 			batteryVoltage: 2,
 			armatureResistance: 100,
 			statorFieldStrength: 1
-		},new Vector3(0, 0, 0), this.scene);
+		},new Vector3(0, 0.25, 0), this.scene);
 
 		// move camera back
 		this.camera.position.x = 5;
