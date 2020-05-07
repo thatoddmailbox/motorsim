@@ -198,11 +198,11 @@ export default class Armature {
 		// (with an origin at the center of the commutator rings)
 		// we want this in world space
 		// commutator  |  world space
-		// positive x --> negative z
-		// negative y --> negative y
+		// positive x --> positive z
+		// negative y --> positive y
 		// add this to the armature position, and you get your result
-		this.topForceArrow.position.addVectors(this.position, new Vector3(ARMATURE_START_WIDTH + (armatureLengthUnits / 2) - 1.5, topY, -topX));
-		this.bottomForceArrow.position.addVectors(this.position, new Vector3(ARMATURE_START_WIDTH + (armatureLengthUnits / 2) - 1.5, bottomY, -bottomX));
+		this.topForceArrow.position.addVectors(this.position, new Vector3(ARMATURE_START_WIDTH + (armatureLengthUnits / 2) - 1.5, -topY, topX));
+		this.bottomForceArrow.position.addVectors(this.position, new Vector3(ARMATURE_START_WIDTH + (armatureLengthUnits / 2) - 1.5, -bottomY, bottomX));
 		// note: there's also a position offset in the x direction of 1.5 units that we accounted for
 		// and we also combine the shift to the center in the x direction with the above calculations
 	}
