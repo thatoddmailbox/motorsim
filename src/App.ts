@@ -18,6 +18,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { COLOR_PLATFORM, COLOR_WHITE } from "consts.ts";
 
 import Motor from "Motor.ts";
+import Resources from "Resources.ts";
 
 export default class App {
 	renderer: WebGLRenderer;
@@ -31,6 +32,8 @@ export default class App {
 	motor: Motor;
 
 	constructor(canvas: HTMLCanvasElement) {
+		Resources.init();
+
 		var canvasWidth = canvas.width;
 		var canvasHeight = canvas.height;
 		

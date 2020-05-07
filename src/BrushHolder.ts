@@ -97,7 +97,7 @@ export default class BrushHolder {
 	}
 
 	update() {
-		this.setAngle(this.angle + 2 * (Math.PI / 180));
+		// this.setAngle(this.angle + 2 * (Math.PI / 180));
 
 		this.armature.update();
 

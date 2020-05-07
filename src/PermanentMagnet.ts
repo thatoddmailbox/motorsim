@@ -1,19 +1,20 @@
 import { BoxGeometry, Mesh, MeshLambertMaterial, Scene, Vector3 } from "three";
 
 import { COLOR_FIELD_MAGNETIC, COLOR_MAGNET_NORTH, COLOR_MAGNET_SOUTH } from "consts.ts";
-import VectorPlane from "VectorPlane.ts";
+
+import VectorField from "VectorField.ts";
 
 export default class PermanentMagnet {
 	northPole: Mesh;
 	southPole: Mesh;
 
-	vectorPlane: VectorPlane;
+	vectorPlane: VectorField;
 
 	constructor(position: Vector3, scene: Scene) {
 		// pole size parameters
 		const width = 2;
 		const height = 0.75;
-		const depth = 0.75;
+		const depth = 2.25;
 
 		const poleDistance = 4;
 		const centerOffset = height / 2;
@@ -40,11 +41,13 @@ export default class PermanentMagnet {
 		/*
 		 * vector field
 		 */
-		this.vectorPlane = new VectorPlane(
+		this.vectorPlane = new VectorField(
 			new Vector3(this.northPole.position.x, this.northPole.position.y - centerOffset, this.northPole.position.z),
 			new Vector3(this.southPole.position.x, this.southPole.position.y + centerOffset, this.southPole.position.z),
 			width,
 			new Vector3(1, 0, 0), // TODO: hardcoded
+			depth,
+			new Vector3(0, 0, 1), // TODO: hardcoded
 			COLOR_FIELD_MAGNETIC,
 			scene
 		);
