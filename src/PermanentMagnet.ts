@@ -2,9 +2,10 @@ import { BoxGeometry, Mesh, MeshLambertMaterial, Scene, Vector3 } from "three";
 
 import { COLOR_FIELD_MAGNETIC, COLOR_MAGNET_NORTH, COLOR_MAGNET_SOUTH } from "consts.ts";
 
+import MagneticField from "MagneticField.ts";
 import VectorField from "VectorField.ts";
 
-export default class PermanentMagnet {
+export default class PermanentMagnet implements MagneticField {
 	northPole: Mesh;
 	southPole: Mesh;
 
@@ -51,5 +52,9 @@ export default class PermanentMagnet {
 			COLOR_FIELD_MAGNETIC,
 			scene
 		);
+	}
+
+	getVector(): Vector3 {
+		return new Vector3(0, -1, 0);
 	}
 };

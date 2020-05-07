@@ -12,9 +12,10 @@ export default class Arrow extends Object3D {
 	line: Mesh;
 	cone: Mesh;
 
-	constructor(dir: Vector3, origin: Vector3, length: number, color: number, headLength?: number, headWidth?: number) {
+	constructor(dir: Vector3, origin: Vector3, length: number, color: number, opacity: number, headLength?: number, headWidth?: number) {
 		super();
 		this.type = "Arrow";
+		this.axis = new Vector3();
 		this.position.copy(origin);
 
 		const lineRadius = 0.025;
@@ -24,12 +25,12 @@ export default class Arrow extends Object3D {
 		this.coneGeometry = new CylinderBufferGeometry(0, 0.5, 1, 10, 1);
 		this.coneGeometry.translate(0, -0.5, 0);
 
-		this.line = new Mesh(this.lineGeometry, new MeshBasicMaterial({ color: color, alphaMap: Resources.arrowAlphaMap, transparent: true, toneMapped: false }));
+		this.line = new Mesh(this.lineGeometry, new MeshBasicMaterial({ color: color, alphaMap: Resources.getAlphaMap(opacity), transparent: true, toneMapped: false }));
 		this.line.position.set(0, 0.3, 0);
 		this.line.matrixAutoUpdate = false;
 		this.add(this.line);
 	
-		this.cone = new Mesh(this.coneGeometry, new MeshBasicMaterial({ color: color, alphaMap: Resources.arrowAlphaMap, transparent: true, toneMapped: false }));
+		this.cone = new Mesh(this.coneGeometry, new MeshBasicMaterial({ color: color, alphaMap: Resources.getAlphaMap(opacity), transparent: true, toneMapped: false }));
 		this.cone.matrixAutoUpdate = false;
 		this.add(this.cone);
 

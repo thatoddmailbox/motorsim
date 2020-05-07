@@ -33,7 +33,7 @@ export default class VectorField {
 				currentStart.add(heightDirection.clone().multiplyScalar(rowIndex * rowHeight));
 				currentStart.add(direction.clone().multiplyScalar(finalArrowSpacing / 2));
 				for (var arrowIndex = 0; arrowIndex < arrowCount; arrowIndex++) {
-					const arrow = new Arrow(direction, currentStart, arrowLength, color, 0.25, 0.25);
+					const arrow = new Arrow(direction, currentStart, arrowLength, color, 128, 0.25, 0.25);
 
 					scene.add(arrow);
 					this.arrows.push(arrow);

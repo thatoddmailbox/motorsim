@@ -16,8 +16,9 @@ export default class Motor {
 
 	constructor(parameters: MotorParameters, position: Vector3, scene: Scene) {
 		this.battery = new Battery(addVectors(position, new Vector3(-2, 0, 0)), scene);
-		this.brushHolder = new BrushHolder(position, scene);
 		this.magnet = new PermanentMagnet(addVectors(position, new Vector3(2, 0, 0)), scene);
+
+		this.brushHolder = new BrushHolder(parameters, this.magnet, position, scene);
 
 		this.setParameters(parameters);
 	}

@@ -5,6 +5,8 @@ import { addVectors } from "utils.ts";
 
 import Armature from "Armature.ts";
 import Commutator from "Commutator.ts";
+import MagneticField from "MagneticField.ts";
+import MotorParameters from "MotorParameters.ts";
 import Polarity from "Polarity.ts";
 
 export default class BrushHolder {
@@ -25,9 +27,15 @@ export default class BrushHolder {
 	positiveMaterial: MeshLambertMaterial;
 	negativeMaterial: MeshLambertMaterial;
 
+	field: MagneticField;
+	parameters: MotorParameters;
+
 	angle: number;
 
-	constructor(position: Vector3, scene: Scene) {
+	constructor(parameters: MotorParameters, field: MagneticField, position: Vector3, scene: Scene) {
+		this.field = field;
+		this.parameters = parameters;
+
 		const width = 0.5;
 		const height = 3.5;
 
@@ -59,7 +67,7 @@ export default class BrushHolder {
 		this.bottomBrush.position.copy(addVectors(position, new Vector3(width/2 + 0.05, armatureHeight - brushOffset, 0)));
 		scene.add(this.bottomBrush);
 
-		this.armature = new Armature(addVectors(position, new Vector3(1.5, armatureHeight, 0)), scene);
+		this.armature = new Armature(parameters, addVectors(position, new Vector3(1.5, armatureHeight, 0)), scene);
 		this.topCommutator = new Commutator(addVectors(position, new Vector3(width/2, armatureHeight, 0)), false, scene);
 		this.bottomCommutator = new Commutator(addVectors(position, new Vector3(width/2, armatureHeight, 0)), true, scene);
 
@@ -72,6 +80,9 @@ export default class BrushHolder {
 		this.topCommutator.setAngle(angle);
 		this.bottomCommutator.setAngle(angle);
 
+		if (angle < 0) {
+			angle = (2 * Math.PI) + (angle % (2 * Math.PI));
+		}
 		this.angle = angle % (2 * Math.PI);
 	}
 
@@ -97,7 +108,7 @@ export default class BrushHolder {
 	}
 
 	update() {
-		// this.setAngle(this.angle + 2 * (Math.PI / 180));
+		this.setAngle(this.angle - 2 * (Math.PI / 180));
 
 		this.armature.update();
 
@@ -117,5 +128,31 @@ export default class BrushHolder {
 
 		this.topCommutator.setPolarity(topCommutatorPolarity);
 		this.bottomCommutator.setPolarity(bottomCommutatorPolarity);
+
+		this.armature.setCurrentDirection(topCommutatorPolarity);
+
+		// the part with the actual physics
+		// we want to know F = IL x B
+		// first, find I with ohm's law: i = v/r
+		const current = this.parameters.batteryVoltage/this.parameters.armatureResistance;
+
+		// find the length vectors and actual length
+		const lengthDirections = this.armature.getLengthDirections();
+		const length = this.parameters.armatureLength;
+
+		// get the magnetic field vector
+		const magneticFieldVector = this.field.getVector();
+
+		// do the math
+		const topForce = lengthDirections[0].multiplyScalar(length * current).cross(magneticFieldVector);
+		const bottomForce = lengthDirections[1].multiplyScalar(length * current).cross(magneticFieldVector);
+
+		const topForceDirection = topForce.clone().normalize();
+		const bottomForceDirection = bottomForce.clone().normalize();
+
+		this.armature.setForceDirections(topForceDirection, bottomForceDirection, this.angle);
+
+		// console.log(topForce);
+		// console.log(bottomForce);
 	}
 };

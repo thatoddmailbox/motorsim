@@ -79,6 +79,7 @@ export default class App {
 
 		this.motor = new Motor({
 			batteryVoltage: 2,
+			armatureLength: 1/12,
 			armatureResistance: 100,
 			statorFieldStrength: 1
 		},new Vector3(0, 0.25, 0), this.scene);
