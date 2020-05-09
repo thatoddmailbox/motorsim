@@ -153,7 +153,7 @@ export default class BrushHolder {
 		const length = this.parameters.armatureLength;
 
 		// get the magnetic field vector
-		const magneticFieldVector = this.field.getVector();
+		const magneticFieldVector = this.field.getVector().multiplyScalar(this.parameters.statorFieldStrength);
 
 		// do the math
 		const topForce = lengthDirections[0].multiplyScalar(length * current).cross(magneticFieldVector);
