@@ -1,4 +1,4 @@
-import { CylinderBufferGeometry, DataTexture, Matrix4, Mesh, MeshLambertMaterial, RGBFormat, RepeatWrapping, Scene, Vector3, MeshBasicMaterial } from "three";
+import { CylinderBufferGeometry, DataTexture, Matrix4, Mesh, MeshLambertMaterial, RGBFormat, Scene, Vector3, ClampToEdgeWrapping } from "three";
 
 import { COLOR_BATTERY_POSITIVE, COLOR_BATTERY_LABEL, COLOR_BATTERY_NEGATIVE } from "consts.ts";
 import { addVectors } from "utils.ts";
@@ -38,8 +38,8 @@ export default class Battery {
 		}
 
 		var sideTexture = new DataTexture(sideTextureData, sideTextureWidth, sideTextureHeight, RGBFormat);
-		sideTexture.wrapS = RepeatWrapping;
-		sideTexture.wrapT = RepeatWrapping;
+		sideTexture.wrapS = ClampToEdgeWrapping;
+		sideTexture.wrapT = ClampToEdgeWrapping;
 
 		const materials = [
 			// side
