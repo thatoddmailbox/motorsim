@@ -25,11 +25,11 @@ import Polarity from "Polarity.ts";
  *      -+---------+ -
  *       |----B----|
  * 
- * A = mainHeight
+ * A = ARMATURE_MAIN_HEIGHT
  * B = mainWidth
  * C = startHeight
  * D = startWidth
- * E = (mainHeight - startHeight) / 2
+ * E = (ARMATURE_MAIN_HEIGHT - startHeight) / 2
  * 
  * origin is at left center of diagram
  * 
@@ -38,6 +38,7 @@ import Polarity from "Polarity.ts";
  */
 const ARMATURE_START_WIDTH = 1;
 const ARMATURE_START_HEIGHT = 0.75;
+const ARMATURE_MAIN_HEIGHT = (1.75/24);
 
 export default class Armature {
 	curveObject: Mesh;
@@ -58,7 +59,7 @@ export default class Armature {
 		const wireRadius = 0.15;
 
 		const mainWidth = parameters.armatureLength * METERS_TO_UNITS;
-		const mainHeight = 1.75;
+		const mainHeight = ARMATURE_MAIN_HEIGHT * METERS_TO_UNITS;
 
 		// points correspond to diagram
 		// start at bottom left, continue clockwise
@@ -88,7 +89,7 @@ export default class Armature {
 
 		this.topCurrentArrow = new Arrow(
 			new Vector3(1, 0, 0),
-			new Vector3(0, (mainHeight / 2) + wireRadius + arrowSpacing, 0),
+			new Vector3(0, (mainHeight / 2) - wireRadius - arrowSpacing, 0),
 			1,
 			COLOR_CURRENT,
 			255,
@@ -100,7 +101,7 @@ export default class Armature {
 
 		this.bottomCurrentArrow = new Arrow(
 			new Vector3(-1, 0, 0),
-			new Vector3(1, -((mainHeight / 2) + wireRadius + arrowSpacing), 0),
+			new Vector3(1, -((mainHeight / 2) - wireRadius - arrowSpacing), 0),
 			1,
 			COLOR_CURRENT,
 			255,
@@ -170,10 +171,33 @@ export default class Armature {
 		}
 	}
 
+	getInertia(): number {
+		const radius = this.getRadius();
+		// we model the armature as four rods
+		// when the armature has an angle of 0, these are the two top and bottom ones, and the two side ones
+		var inertia = 0;
+
+		// top and bottom are rods
+		return 1; // TODO
+	}
+
+	getRadius(): number {
+		return ARMATURE_MAIN_HEIGHT / 2;
+	}
+
 	getLengthDirections() : Vector3[] {
 		return [
 			new Vector3((this.currentDirection == Polarity.Negative ? -1 : 1), 0, 0),
 			new Vector3((this.currentDirection == Polarity.Negative ? 1 : -1), 0, 0),
+		];
+	}
+
+	getTopPositions(currentAngle: number): number[] {
+		const mainHeight = ARMATURE_MAIN_HEIGHT * METERS_TO_UNITS;
+
+		return [
+			(mainHeight / 2)*Math.cos(currentAngle - (Math.PI / 2)),
+			(mainHeight / 2)*Math.sin(currentAngle - (Math.PI / 2))
 		];
 	}
 
@@ -187,8 +211,7 @@ export default class Armature {
 		// cos and sin of (angle + 90deg) give you x, y of bottom force
 		// 90 deg = pi/2
 
-		const topX = Math.cos(currentAngle - (Math.PI / 2));
-		const topY = Math.sin(currentAngle - (Math.PI / 2));
+		const [ topX, topY ] = this.getTopPositions(currentAngle);
 		const bottomX = -topX; // same as Math.cos(currentAngle + (Math.PI / 2));
 		const bottomY = -topY; // same as Math.sin(currentAngle + (Math.PI / 2));
 

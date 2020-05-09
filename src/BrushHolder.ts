@@ -31,6 +31,7 @@ export default class BrushHolder {
 	parameters: MotorParameters;
 
 	angle: number;
+	angularVelocity: number;
 
 	constructor(parameters: MotorParameters, field: MagneticField, position: Vector3, scene: Scene) {
 		this.field = field;
@@ -71,6 +72,7 @@ export default class BrushHolder {
 		this.topCommutator = new Commutator(addVectors(position, new Vector3(width/2, armatureHeight, 0)), false, scene);
 		this.bottomCommutator = new Commutator(addVectors(position, new Vector3(width/2, armatureHeight, 0)), true, scene);
 
+		this.angularVelocity = 0;
 		this.setAngle(0);
 		this.setBrushPolarity(Polarity.Positive, Polarity.Negative);
 	}
@@ -107,9 +109,7 @@ export default class BrushHolder {
 		}
 	}
 
-	update() {
-		this.setAngle(this.angle - 2 * (Math.PI / 180));
-
+	update(dt: number) {
 		this.armature.update();
 
 		var topCommutatorPolarity = Polarity.Neutral;
@@ -152,7 +152,47 @@ export default class BrushHolder {
 
 		this.armature.setForceDirections(topForceDirection, bottomForceDirection, this.angle);
 
-		// console.log(topForce);
-		// console.log(bottomForce);
+		// now we have the force, prepare to find torque
+		// we need to find the lever arm first
+		const [ topX, topY ] = this.armature.getTopPositions(this.angle);
+		const bottomX = -topX;
+		const bottomY = -topY;
+		const leverArm = this.armature.getRadius();
+
+		// see Armature.setForceDirections to see why this conversion makes sense
+		const topLeverArm = new Vector3(0, -topY, topX).multiplyScalar(leverArm);
+		const bottomLeverArm = new Vector3(0, -bottomY, bottomX).multiplyScalar(leverArm);
+
+		// torque = r x F
+		const topTorque = new Vector3().crossVectors(topLeverArm, topForce);
+		const bottomTorque = new Vector3().crossVectors(bottomLeverArm, bottomForce);
+
+		// TODO: we are making an assumption about how everything is axis-aligned
+		// TODO: it works in *this* case, but if the motor was rotated, would be broken
+		const topTorqueValue = topTorque.x;
+		const bottomTorqueValue = bottomTorque.x;
+
+		const inertia = this.armature.getInertia();
+
+		// torque = i*alpha, so alpha = torque/i
+		const topAcceleration = topTorqueValue/inertia;
+		const bottomAcceleration = bottomTorqueValue/inertia;
+
+		// console.log("topAcceleration", topAcceleration);
+		// console.log("bottomAcceleration", bottomAcceleration);
+
+		// by the magic of coordinate systems, this is consistent with three.js's rotation
+		// in other words, we can just use the sign that came out of the cross product
+
+		// now we know the acceleration, we apply to our velocity in one frame timestep
+		this.angularVelocity += topAcceleration*dt;
+		this.angularVelocity += bottomAcceleration*dt;
+
+		// now we have updated the angular veloctiy, we can change the angle
+		this.setAngle(this.angle + this.angularVelocity*dt);
+
+		// console.log("top", topAcceleration);
+		// console.log("bottom", bottomAcceleration);
+		// this.setAngle(this.angle - 2 * (Math.PI / 180));
 	}
 };

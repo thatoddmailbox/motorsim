@@ -27,7 +27,7 @@ export default class Motor {
 		this.parameters = parameters;
 	}
 
-	update() {
-		this.brushHolder.update();
+	update(dt: number) {
+		this.brushHolder.update(dt);
 	}
 };

@@ -2,6 +2,7 @@ import {
 	AmbientLight,
 	BoxBufferGeometry,
 	CameraHelper,
+	Clock,
 	DirectionalLight,
 	DirectionalLightHelper,
 	Mesh,
@@ -22,6 +23,7 @@ import Resources from "Resources.ts";
 
 export default class App {
 	renderer: WebGLRenderer;
+	clock: Clock;
 
 	scene: Scene;
 	camera: PerspectiveCamera;
@@ -33,6 +35,8 @@ export default class App {
 
 	constructor(canvas: HTMLCanvasElement) {
 		Resources.init();
+
+		this.clock = new Clock();
 
 		var canvasWidth = canvas.width;
 		var canvasHeight = canvas.height;
@@ -78,9 +82,10 @@ export default class App {
 		this.scene.add(platform);
 
 		this.motor = new Motor({
-			batteryVoltage: 2,
+			batteryVoltage: 10,
+			armatureMass: 0.1,
 			armatureLength: 1/12,
-			armatureResistance: 100,
+			armatureResistance: 1,
 			statorFieldStrength: 1
 		},new Vector3(0, 0.25, 0), this.scene);
 
@@ -94,7 +99,9 @@ export default class App {
 	}
 
 	update() {
-		this.motor.update();
+		const dt = this.clock.getDelta();
+
+		this.motor.update(dt);
 
 		this.controls.update();
 	}

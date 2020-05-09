@@ -2,6 +2,9 @@ export default interface MotorParameters {
 	// battery voltage, in volts
 	batteryVoltage: number;
 
+	// armature mass, in kilograms
+	armatureMass: number;
+
 	// armature length, in meters
 	armatureLength: number;
 
