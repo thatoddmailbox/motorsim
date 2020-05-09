@@ -132,9 +132,21 @@ export default class BrushHolder {
 		this.armature.setCurrentDirection(topCommutatorPolarity);
 
 		// the part with the actual physics
+		// first, we need to know the actual voltage at the commutator
+		// this will be (battery voltage) - (back emf)
+		// for back emf: faraday's law says it's the negative time derivative of magnetic flux
+		// magnetic flux is B*A*sin(angle)
+		// emf is therefore -B*A*omega*cos(angle)
+		const backEMF = -(
+			this.parameters.statorFieldStrength*this.armature.getArea()*
+			this.angularVelocity*
+			Math.cos(this.angle)
+		);
+		const commutatorVoltage = this.parameters.batteryVoltage + backEMF;
+
 		// we want to know F = IL x B
-		// first, find I with ohm's law: i = v/r
-		const current = this.parameters.batteryVoltage/this.parameters.armatureResistance;
+		// so, find I with ohm's law: i = v/r
+		const current = commutatorVoltage/this.parameters.armatureResistance;
 
 		// find the length vectors and actual length
 		const lengthDirections = this.armature.getLengthDirections();

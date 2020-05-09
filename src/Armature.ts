@@ -181,6 +181,10 @@ export default class Armature {
 		return 1; // TODO
 	}
 
+	getArea(): number {
+		return this.parameters.armatureLength*ARMATURE_MAIN_HEIGHT;
+	}
+
 	getRadius(): number {
 		return ARMATURE_MAIN_HEIGHT / 2;
 	}
