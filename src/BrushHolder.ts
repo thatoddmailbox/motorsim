@@ -215,5 +215,10 @@ export default class BrushHolder {
 
 		// now we have updated the angular veloctiy, we can change the angle
 		this.setAngle(this.angle + this.angularVelocity*dt);
+
+		// report data to the main app
+		if (this.parameters.dataCallback) {
+			this.parameters.dataCallback(this.angularVelocity);
+		}
 	}
 };

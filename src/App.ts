@@ -89,7 +89,9 @@ export default class App {
 			armatureMass: 0.1,
 			armatureLength: 1/12,
 			armatureResistance: 100,
-			statorFieldStrength: 0.005
+			statorFieldStrength: 0.001,
+
+			dataCallback: null
 		};
 		this.motor = new Motor(this.parameters, new Vector3(0, 0.25, 0), this.scene);
 
@@ -106,44 +108,44 @@ export default class App {
 		var displayParameters = {
 			batteryVoltage: {
 				name: "Battery voltage",
-				units: "V",
+				unit: "V",
 				min: 1,
 				max: 100,
 				step: 1
 			},
 			armatureMass: {
 				name: "Armature mass",
-				units: "kg",
+				unit: "kg",
 				min: 0.1,
 				max: 10,
 				step: 0.1
 			},
 			// armatureLength: {
 			// 	name: "Armature length",
-			// 	units: "m",
+			// 	unit: "m",
 			// 	min: 0.01,
 			// 	max: 1,
 			// 	step: 0.1
 			// },
 			armatureResistance: {
 				name: "Armature resistance",
-				units: "ohms",
+				unit: "\u2126",
 				min: 1,
 				max: 1000,
-				step: 10
+				step: 1
 			},
 			statorFieldStrength: {
 				name: "Stator field strength",
-				units: "T",
+				unit: "T",
 				min: 0.0001,
-				max: 2,
+				max: 0.25,
 				step: 0.0001
 			}
 		};
 
-		var sliderChangeCallback = function(parameterKey: string, e: InputEvent) {
+		var sliderChangeCallback = function(parameterKey: string, parameterDisplayNumber: HTMLDivElement, e: InputEvent) {
 			var displayParameter = displayParameters[parameterKey];
-			var newValue = parseInt((e.target as HTMLInputElement).value);
+			var newValue = parseFloat((e.target as HTMLInputElement).value);
 
 			if (newValue < displayParameter.min) {
 				newValue = displayParameter.min;
@@ -153,6 +155,7 @@ export default class App {
 			}
 
 			this.parameters[parameterKey] = newValue;
+			parameterDisplayNumber.textContent = newValue.toString();
 			// console.log(parameterKey, this.parameters[parameterKey]);
 		};
 
@@ -160,10 +163,23 @@ export default class App {
 			var displayParameter = displayParameters[parameterKey];
 
 			var parameterElement = document.createElement("div");
+			parameterElement.className = "parameter";
 
 			var parameterName = document.createElement("div");
-			parameterName.innerText = displayParameter.name;
+			parameterName.className = "parameterName";
+			parameterName.textContent = displayParameter.name;
 			parameterElement.appendChild(parameterName);
+
+			var parameterDisplay = document.createElement("div");
+
+			var parameterDisplayNumber = document.createElement("span");
+			parameterDisplayNumber.textContent = this.parameters[parameterKey].toString();
+			parameterElement.appendChild(parameterDisplayNumber);
+			var parameterDisplayUnits = document.createElement("span");
+			parameterDisplayUnits.textContent = " " + displayParameter.unit;
+			parameterElement.appendChild(parameterDisplayUnits);
+
+			parameterElement.appendChild(parameterDisplay);
 
 			var parameterSlider = document.createElement("input");
 			parameterSlider.type = "range";
@@ -171,18 +187,35 @@ export default class App {
 			parameterSlider.max = displayParameter.max;
 			parameterSlider.step = displayParameter.step;
 			parameterSlider.value = this.parameters[parameterKey];
-			parameterSlider.addEventListener("input", sliderChangeCallback.bind(this, parameterKey));
+			parameterSlider.addEventListener("input", sliderChangeCallback.bind(this, parameterKey, parameterDisplayNumber));
 			parameterElement.appendChild(parameterSlider);
 
 			controlPanel.appendChild(parameterElement);
 		}
 
-		var resetVelocity = document.createElement("button");
-		resetVelocity.innerText = "Reset angular velocity";
-		resetVelocity.addEventListener("click", () => {
+		var angularVelocityElement = document.createElement("div");
+		angularVelocityElement.className = "parameter";
+
+		var angularVelocityName = document.createElement("div");
+		angularVelocityName.className = "parameterName";
+		angularVelocityName.textContent = "Angular velocity (\u03C9)";
+		angularVelocityElement.appendChild(angularVelocityName);
+
+		var angularVelocityDisplay = document.createElement("div");
+		angularVelocityElement.appendChild(angularVelocityDisplay);
+
+		var angularVelocityReset = document.createElement("button");
+		angularVelocityReset.textContent = "Reset";
+		angularVelocityReset.addEventListener("click", () => {
 			this.motor.resetAngularVelocity();
 		});
-		controlPanel.appendChild(resetVelocity);
+		angularVelocityElement.appendChild(angularVelocityReset);
+
+		controlPanel.appendChild(angularVelocityElement);
+
+		this.parameters.dataCallback = function(angularVelocity: number) {
+			angularVelocityDisplay.textContent = angularVelocity.toFixed(3);
+		};
 	}
 
 	update() {
