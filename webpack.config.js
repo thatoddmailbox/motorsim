@@ -3,7 +3,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const path = require("path");
 
@@ -16,7 +16,7 @@ module.exports = {
 
 	output: {
 		path: __dirname + "/dist",
-		filename: "bundle.js",
+		filename: "bundle.[chunkhash].js",
 		publicPath: "/"
 	},
 
@@ -27,10 +27,8 @@ module.exports = {
 
 	optimization: {
 		minimizer: (mode == "production" ? [
-			new UglifyJsPlugin({
-				cache: true,
-				parallel: true,
-				sourceMap: (mode != "production")
+			new TerserPlugin({
+				test: /\.js(\?.*)?$/i
 			}),
 			new OptimizeCssAssetsPlugin({})
 		] : []),
