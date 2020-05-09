@@ -172,13 +172,15 @@ export default class Armature {
 	}
 
 	getInertia(): number {
-		const radius = this.getRadius();
+		const mass = this.parameters.armatureMass;
+
 		// we model the armature as four rods
 		// when the armature has an angle of 0, these are the two top and bottom ones, and the two side ones
-		var inertia = 0;
-
-		// top and bottom are rods
-		return 1; // TODO
+		// sides are 1/12*(m*H^2) each
+		// top and bottom are m*(H/2)^2 each
+		// say a rod's mass is 1/4 the armature's mass
+		// add together and simplify to get (M*H^2)/6
+		return (mass * ARMATURE_MAIN_HEIGHT*ARMATURE_MAIN_HEIGHT)/6;
 	}
 
 	getArea(): number {
