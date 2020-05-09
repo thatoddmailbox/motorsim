@@ -48,7 +48,7 @@ export default class BrushHolder {
 
 		const brushGeometry = new BoxBufferGeometry(0.2, 0.2, 0.2);
 
-		const holderGeometry = new BoxBufferGeometry(width, height, 2);
+		const holderGeometry = new BoxBufferGeometry(width, height, 2.75);
 		const holderMaterial = new MeshLambertMaterial({ color: COLOR_BRUSH_HOLDER });
 
 		// main holder
