@@ -91,7 +91,7 @@ export default class App {
 			batteryVoltage: 10,
 			armatureMass: 0.1,
 			armatureLength: 1/12,
-			armatureResistance: 100,
+			armatureResistance: 50,
 			statorFieldStrength: 0.002,
 
 			dataCallback: null
@@ -99,9 +99,9 @@ export default class App {
 		this.motor = new Motor(this.parameters, new Vector3(0, 0.25, 0), this.scene);
 
 		// move camera back
-		this.camera.position.x = 5;
+		this.camera.position.x = 10;
 		this.camera.position.y = 7;
-		this.camera.position.z = 17.5;
+		this.camera.position.z = 12.5;
 		this.camera.lookAt(0, 2, 0);
 		this.controls.update();
 		// this.camera.rotation.x = -2*(Math.PI/180);
