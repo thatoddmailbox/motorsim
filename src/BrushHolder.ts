@@ -109,6 +109,10 @@ export default class BrushHolder {
 		}
 	}
 
+	resetAngularVelocity() {
+		this.angularVelocity = 0;
+	}
+
 	update(dt: number) {
 		this.armature.update();
 
@@ -159,6 +163,18 @@ export default class BrushHolder {
 		const topForce = lengthDirections[0].multiplyScalar(length * current).cross(magneticFieldVector);
 		const bottomForce = lengthDirections[1].multiplyScalar(length * current).cross(magneticFieldVector);
 
+		// if (isNaN(topForce.x) || isNaN(bottomForce.x)) {
+		// 	console.log("1");
+		// 	console.log("length", length);
+		// 	console.log("current", current);
+		// 	console.log("commutatorVoltage", commutatorVoltage);
+		// 	console.log("this.parameters.batteryVoltage", this.parameters.batteryVoltage);
+		// 	console.log("backEMF", backEMF);
+		// 	console.log("topForce", topForce);
+		// 	console.log("bottomForce", bottomForce);
+		// 	alert("asdf");
+		// }
+
 		const topForceDirection = topForce.clone().normalize();
 		const bottomForceDirection = bottomForce.clone().normalize();
 
@@ -190,9 +206,6 @@ export default class BrushHolder {
 		const topAcceleration = topTorqueValue/inertia;
 		const bottomAcceleration = bottomTorqueValue/inertia;
 
-		// console.log("topAcceleration", topAcceleration);
-		// console.log("bottomAcceleration", bottomAcceleration);
-
 		// by the magic of coordinate systems, this is consistent with three.js's rotation
 		// in other words, we can just use the sign that came out of the cross product
 
@@ -202,9 +215,5 @@ export default class BrushHolder {
 
 		// now we have updated the angular veloctiy, we can change the angle
 		this.setAngle(this.angle + this.angularVelocity*dt);
-
-		// console.log("top", topAcceleration);
-		// console.log("bottom", bottomAcceleration);
-		// this.setAngle(this.angle - 2 * (Math.PI / 180));
 	}
 };

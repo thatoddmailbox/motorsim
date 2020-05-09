@@ -27,6 +27,10 @@ export default class Motor {
 		this.parameters = parameters;
 	}
 
+	resetAngularVelocity() {
+		this.brushHolder.resetAngularVelocity();
+	}
+
 	update(dt: number) {
 		this.brushHolder.update(dt);
 	}
