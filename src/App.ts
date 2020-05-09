@@ -36,10 +36,13 @@ export default class App {
 
 	parameters: MotorParameters;
 
+	paused: boolean;
+
 	constructor(canvas: HTMLCanvasElement) {
 		Resources.init();
 
 		this.clock = new Clock();
+		this.paused = false;
 
 		var canvasWidth = canvas.width;
 		var canvasHeight = canvas.height;
@@ -89,7 +92,7 @@ export default class App {
 			armatureMass: 0.1,
 			armatureLength: 1/12,
 			armatureResistance: 100,
-			statorFieldStrength: 0.001,
+			statorFieldStrength: 0.002,
 
 			dataCallback: null
 		};
@@ -104,6 +107,7 @@ export default class App {
 		// this.camera.rotation.x = -2*(Math.PI/180);
 
 		// create control panel
+		var simulation = document.querySelector(".simulation") as HTMLDivElement;
 		var controlPanel = document.getElementById("controlPanel") as HTMLDivElement;
 		var displayParameters = {
 			batteryVoltage: {
@@ -116,9 +120,9 @@ export default class App {
 			armatureMass: {
 				name: "Armature mass",
 				unit: "kg",
-				min: 0.1,
-				max: 10,
-				step: 0.1
+				min: 0.01,
+				max: 2,
+				step: 0.001
 			},
 			// armatureLength: {
 			// 	name: "Armature length",
@@ -158,6 +162,19 @@ export default class App {
 			parameterDisplayNumber.textContent = newValue.toString();
 			// console.log(parameterKey, this.parameters[parameterKey]);
 		};
+
+		var pauseButton = document.createElement("button");
+		pauseButton.textContent = "Pause";
+		pauseButton.addEventListener("click", () => {
+			this.paused = !this.paused;
+			pauseButton.textContent = (this.paused ? "Resume" : "Pause");
+			if (this.paused) {
+				simulation.classList.add("paused");
+			} else {
+				simulation.classList.remove("paused");
+			}
+		});
+		controlPanel.append(pauseButton);
 
 		for (var parameterKey in displayParameters) {
 			var displayParameter = displayParameters[parameterKey];
@@ -202,6 +219,13 @@ export default class App {
 		angularVelocityElement.appendChild(angularVelocityName);
 
 		var angularVelocityDisplay = document.createElement("div");
+
+		var angularVelocityNumber = document.createElement("span");
+		angularVelocityDisplay.appendChild(angularVelocityNumber);
+		var angularVelocityUnits = document.createElement("span");
+		angularVelocityUnits.textContent = " rad/sec";
+		angularVelocityDisplay.appendChild(angularVelocityUnits);
+
 		angularVelocityElement.appendChild(angularVelocityDisplay);
 
 		var angularVelocityReset = document.createElement("button");
@@ -214,12 +238,16 @@ export default class App {
 		controlPanel.appendChild(angularVelocityElement);
 
 		this.parameters.dataCallback = function(angularVelocity: number) {
-			angularVelocityDisplay.textContent = angularVelocity.toFixed(3);
+			angularVelocityNumber.textContent = angularVelocity.toFixed(3);
 		};
 	}
 
 	update() {
 		const dt = this.clock.getDelta();
+
+		if (this.paused) {
+			return;
+		}
 
 		this.motor.update(dt);
 
