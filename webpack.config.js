@@ -17,7 +17,7 @@ module.exports = {
 	output: {
 		path: __dirname + "/dist",
 		filename: "bundle.[chunkhash].js",
-		publicPath: "/"
+		publicPath: ""
 	},
 
 	devServer: {
