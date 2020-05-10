@@ -141,13 +141,13 @@ export default class App {
 			statorFieldStrength: {
 				name: "Stator field strength",
 				unit: "T",
-				min: 0.0001,
+				min: 0,
 				max: 0.25,
 				step: 0.0001
 			}
 		};
 
-		var sliderChangeCallback = function(parameterKey: string, parameterDisplayNumber: HTMLDivElement, e: InputEvent) {
+		var sliderChangeCallback = (parameterKey: string, parameterDisplayNumber: HTMLDivElement, e: InputEvent) => {
 			var displayParameter = displayParameters[parameterKey];
 			var newValue = parseFloat((e.target as HTMLInputElement).value);
 
@@ -160,6 +160,7 @@ export default class App {
 
 			this.parameters[parameterKey] = newValue;
 			parameterDisplayNumber.textContent = newValue.toString();
+			this.motor.updateParameters();
 			// console.log(parameterKey, this.parameters[parameterKey]);
 		};
 

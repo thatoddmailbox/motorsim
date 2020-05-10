@@ -184,7 +184,7 @@ export default class BrushHolder {
 		const topForceDirection = topForce.clone().normalize();
 		const bottomForceDirection = bottomForce.clone().normalize();
 
-		this.armature.setForceDirections(topForceDirection, bottomForceDirection, this.angle);
+		this.armature.setForceDirections(topForce.length() != 0 && topForceDirection, bottomForce.length() != 0 && bottomForceDirection, this.angle);
 
 		// now we have the force, prepare to find torque
 		// we need to find the lever arm first

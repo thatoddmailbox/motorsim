@@ -31,6 +31,10 @@ export default class Motor {
 		this.brushHolder.resetAngularVelocity();
 	}
 
+	updateParameters() {
+		this.magnet.setFieldVisible(this.parameters.statorFieldStrength != 0);
+	}
+
 	update(dt: number) {
 		this.brushHolder.update(dt);
 	}

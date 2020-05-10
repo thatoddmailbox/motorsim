@@ -57,4 +57,8 @@ export default class PermanentMagnet implements MagneticField {
 	getVector(): Vector3 {
 		return new Vector3(0, -1, 0);
 	}
+
+	setFieldVisible(visible: boolean) {
+		this.vectorPlane.setVisible(visible);
+	}
 };

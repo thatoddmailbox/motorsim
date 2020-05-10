@@ -43,4 +43,10 @@ export default class VectorField {
 			}
 		}
 	}
+
+	setVisible(visible: boolean) {
+		for (var i = 0; i < this.arrows.length; i++) {
+			this.arrows[i].visible = visible;
+		}
+	}
 };
