@@ -119,15 +119,21 @@ export default class BrushHolder {
 		var topCommutatorPolarity = Polarity.Neutral;
 		var bottomCommutatorPolarity = Polarity.Neutral;
 
-		if (this.angle < (Math.PI / 2) || this.angle > ((3 * Math.PI) / 2)) {
-			topCommutatorPolarity = this.topBrushPolarity;
-			bottomCommutatorPolarity = this.bottomBrushPolarity;
-		} else if (this.angle > (Math.PI / 2) && this.angle < ((3 * Math.PI) / 2)) {
-			topCommutatorPolarity = this.bottomBrushPolarity;
-			bottomCommutatorPolarity = this.topBrushPolarity;
+		if (this.parameters.batteryVoltage != 0) {
+			this.setBrushPolarity(Polarity.Positive, Polarity.Negative);
+
+			if (this.angle < (Math.PI / 2) || this.angle > ((3 * Math.PI) / 2)) {
+				topCommutatorPolarity = this.topBrushPolarity;
+				bottomCommutatorPolarity = this.bottomBrushPolarity;
+			} else if (this.angle > (Math.PI / 2) && this.angle < ((3 * Math.PI) / 2)) {
+				topCommutatorPolarity = this.bottomBrushPolarity;
+				bottomCommutatorPolarity = this.topBrushPolarity;
+			} else {
+				topCommutatorPolarity = Polarity.Neutral;
+				bottomCommutatorPolarity = Polarity.Neutral;
+			}
 		} else {
-			topCommutatorPolarity = Polarity.Neutral;
-			bottomCommutatorPolarity = Polarity.Neutral;
+			this.setBrushPolarity(Polarity.Neutral, Polarity.Neutral);
 		}
 
 		this.topCommutator.setPolarity(topCommutatorPolarity);

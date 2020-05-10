@@ -5,7 +5,7 @@ export const COLOR_TORQUE = 0xff00ff;
 
 export const COLOR_FIELD_MAGNETIC = 0x00ff00;
 
-export const COLOR_POLARITY_NEUTRAL = 0xffffff;
+export const COLOR_POLARITY_NEUTRAL = 0x555555;
 export const COLOR_POLARITY_POSITIVE = 0xff0000;
 export const COLOR_POLARITY_NEGATIVE = 0x222222;
 
