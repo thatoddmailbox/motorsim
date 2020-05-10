@@ -14,5 +14,5 @@ export default interface MotorParameters {
 	// stator field strength, in tesla
 	statorFieldStrength: number;
 
-	dataCallback(angularVelocity: number): void;
+	dataCallback(angularVelocity: number, backEMF: number, armatureCurrent: number): void;
 };

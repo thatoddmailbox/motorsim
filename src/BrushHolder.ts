@@ -224,7 +224,7 @@ export default class BrushHolder {
 
 		// report data to the main app
 		if (this.parameters.dataCallback) {
-			this.parameters.dataCallback(this.angularVelocity);
+			this.parameters.dataCallback(this.angularVelocity, backEMF, current);
 		}
 	}
 };
