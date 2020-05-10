@@ -61,7 +61,7 @@ export default class App {
 		this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 		
 		// light
-		this.light = new DirectionalLight(COLOR_WHITE, 1);
+		this.light = new DirectionalLight(COLOR_WHITE, 1.25);
 		this.light.position.set(5, 5, 10);
 		this.light.target.position.set(0, 2, 0);
 		this.light.castShadow = true;
