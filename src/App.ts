@@ -269,7 +269,7 @@ export default class App {
 
 		this.parameters.dataCallback = function(data: MotorData) {
 			displayParameters.angularVelocity.numberElement.textContent = data.angularVelocity.toFixed(3);
-			displayParameters.backEMF.numberElement.textContent = data.backEMF.toFixed(6);
+			displayParameters.backEMF.numberElement.textContent = (-1 * data.backEMF).toFixed(6);
 			// displayParameters.commutatorVoltage.numberElement.textContent = data.commutatorVoltage.toFixed(6);
 			displayParameters.armatureCurrent.numberElement.textContent = data.armatureCurrent.toFixed(6);
 			// displayParameters.topForce.numberElement.textContent = data.topForce.length().toFixed(6);
