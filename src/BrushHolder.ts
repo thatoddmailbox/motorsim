@@ -142,6 +142,8 @@ export default class BrushHolder {
 
 		this.armature.setCurrentDirection(topCommutatorPolarity);
 
+		const flipVoltage = (this.angle > (Math.PI / 2) && this.angle < ((3 * Math.PI) / 2));
+
 		// the part with the actual physics
 		// first, we need to know the actual voltage at the commutator
 		// this will be (battery voltage) - (back emf)
@@ -153,14 +155,14 @@ export default class BrushHolder {
 			this.angularVelocity*
 			Math.cos(this.angle)
 		);
-		const commutatorVoltage = this.parameters.batteryVoltage + backEMF;
+		const commutatorVoltage = ((flipVoltage ? -1 : 1) * this.parameters.batteryVoltage - backEMF);
 
 		// we want to know F = IL x B
 		// so, find I with ohm's law: i = v/r
 		const current = commutatorVoltage/this.parameters.armatureResistance;
 
 		// find the length vectors and actual length
-		const lengthDirections = this.armature.getLengthDirections();
+		const lengthDirections = this.armature.getLengthDirections(this.angle);
 		const length = this.parameters.armatureLength;
 
 		// get the magnetic field vector
@@ -213,7 +215,14 @@ export default class BrushHolder {
 
 		// report data to the main app
 		if (this.parameters.dataCallback) {
-			this.parameters.dataCallback(this.angularVelocity, backEMF, current);
+			this.parameters.dataCallback({
+				angularVelocity: this.angularVelocity,
+
+				commutatorVoltage: commutatorVoltage,
+				backEMF: backEMF,
+				armatureCurrent: current,
+				topForce: topForce
+			});
 		}
 	}
 };

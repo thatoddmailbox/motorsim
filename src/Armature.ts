@@ -187,10 +187,11 @@ export default class Armature {
 		return ARMATURE_MAIN_HEIGHT / 2;
 	}
 
-	getLengthDirections() : Vector3[] {
+	getLengthDirections(currentAngle: number) : Vector3[] {
+		var flipped = (currentAngle > Math.PI / 2 && currentAngle < (3 * Math.PI) / 2);
 		return [
-			new Vector3((this.currentDirection == Polarity.Negative ? -1 : 1), 0, 0),
-			new Vector3((this.currentDirection == Polarity.Negative ? 1 : -1), 0, 0),
+			new Vector3(1, 0, 0),
+			new Vector3(-1, 0, 0),
 		];
 	}
 

@@ -1,3 +1,5 @@
+import MotorData from "MotorData.ts";
+
 export default interface MotorParameters {
 	// battery voltage, in volts
 	batteryVoltage: number;
@@ -14,5 +16,5 @@ export default interface MotorParameters {
 	// stator field strength, in tesla
 	statorFieldStrength: number;
 
-	dataCallback(angularVelocity: number, backEMF: number, armatureCurrent: number): void;
+	dataCallback(data: MotorData): void;
 };

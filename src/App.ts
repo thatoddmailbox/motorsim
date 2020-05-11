@@ -19,6 +19,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { COLOR_PLATFORM, COLOR_WHITE } from "consts.ts";
 
 import Motor from "Motor.ts";
+import MotorData from "MotorData.ts";
 import MotorParameters from "MotorParameters.ts";
 import Resources from "Resources.ts";
 
@@ -175,11 +176,21 @@ export default class App {
 				unit: "V",
 				displayOnly: true
 			},
+			// commutatorVoltage: {
+			// 	name: "Commutator voltage",
+			// 	unit: "V",
+			// 	displayOnly: true
+			// },
 			armatureCurrent: {
 				name: "Armature current",
 				unit: "A",
 				displayOnly: true
-			}
+			},
+			// topForce: {
+			// 	name: "Top force",
+			// 	unit: "N",
+			// 	displayOnly: true
+			// },
 		};
 
 		var sliderChangeCallback = (parameterKey: string, parameterDisplayNumber: HTMLDivElement, e: InputEvent) => {
@@ -256,10 +267,12 @@ export default class App {
 			displayParameter.numberElement = parameterDisplayNumber;
 		}
 
-		this.parameters.dataCallback = function(angularVelocity: number, backEMF: number, armatureCurrent: number) {
-			displayParameters.angularVelocity.numberElement.textContent = angularVelocity.toFixed(3);
-			displayParameters.backEMF.numberElement.textContent = backEMF.toFixed(6);
-			displayParameters.armatureCurrent.numberElement.textContent = armatureCurrent.toFixed(6);
+		this.parameters.dataCallback = function(data: MotorData) {
+			displayParameters.angularVelocity.numberElement.textContent = data.angularVelocity.toFixed(3);
+			displayParameters.backEMF.numberElement.textContent = data.backEMF.toFixed(6);
+			// displayParameters.commutatorVoltage.numberElement.textContent = data.commutatorVoltage.toFixed(6);
+			displayParameters.armatureCurrent.numberElement.textContent = data.armatureCurrent.toFixed(6);
+			// displayParameters.topForce.numberElement.textContent = data.topForce.length().toFixed(6);
 		};
 	}
 
