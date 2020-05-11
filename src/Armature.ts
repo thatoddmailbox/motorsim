@@ -154,8 +154,6 @@ export default class Armature {
 		if (direction == Polarity.Positive || direction == Polarity.Negative) {
 			this.topCurrentArrow.visible = true;
 			this.bottomCurrentArrow.visible = true;
-			this.topForceArrow.visible = true;
-			this.bottomForceArrow.visible = true;
 
 			var directionFactor = (direction == Polarity.Negative ? -1 : 1);
 
@@ -166,8 +164,6 @@ export default class Armature {
 		} else {
 			this.topCurrentArrow.visible = false;
 			this.bottomCurrentArrow.visible = false;
-			this.topForceArrow.visible = false;
-			this.bottomForceArrow.visible = false;
 		}
 	}
 
@@ -208,6 +204,9 @@ export default class Armature {
 	}
 
 	setForceDirections(topForceDirection: Vector3, bottomForceDirection: Vector3, currentAngle: number) {
+		this.topForceArrow.visible = !!topForceDirection;
+		this.bottomForceArrow.visible = !!bottomForceDirection;
+
 		this.topForceArrow.setDirection(topForceDirection);
 		this.bottomForceArrow.setDirection(bottomForceDirection);
 

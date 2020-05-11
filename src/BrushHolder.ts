@@ -122,6 +122,7 @@ export default class BrushHolder {
 		if (this.parameters.batteryVoltage != 0) {
 			this.setBrushPolarity(Polarity.Positive, Polarity.Negative);
 
+			// using the current armature angle, determine which commutator ring is connected to which brush
 			if (this.angle < (Math.PI / 2) || this.angle > ((3 * Math.PI) / 2)) {
 				topCommutatorPolarity = this.topBrushPolarity;
 				bottomCommutatorPolarity = this.bottomBrushPolarity;
@@ -169,21 +170,9 @@ export default class BrushHolder {
 		const topForce = lengthDirections[0].multiplyScalar(length * current).cross(magneticFieldVector);
 		const bottomForce = lengthDirections[1].multiplyScalar(length * current).cross(magneticFieldVector);
 
-		// if (isNaN(topForce.x) || isNaN(bottomForce.x)) {
-		// 	console.log("1");
-		// 	console.log("length", length);
-		// 	console.log("current", current);
-		// 	console.log("commutatorVoltage", commutatorVoltage);
-		// 	console.log("this.parameters.batteryVoltage", this.parameters.batteryVoltage);
-		// 	console.log("backEMF", backEMF);
-		// 	console.log("topForce", topForce);
-		// 	console.log("bottomForce", bottomForce);
-		// 	alert("asdf");
-		// }
-
+		// find the force directions for displaying the vectors
 		const topForceDirection = topForce.clone().normalize();
 		const bottomForceDirection = bottomForce.clone().normalize();
-
 		this.armature.setForceDirections(topForce.length() != 0 && topForceDirection, bottomForce.length() != 0 && bottomForceDirection, this.angle);
 
 		// now we have the force, prepare to find torque
@@ -201,8 +190,8 @@ export default class BrushHolder {
 		const topTorque = new Vector3().crossVectors(topLeverArm, topForce);
 		const bottomTorque = new Vector3().crossVectors(bottomLeverArm, bottomForce);
 
-		// TODO: we are making an assumption about how everything is axis-aligned
-		// TODO: it works in *this* case, but if the motor was rotated, would be broken
+		// NOTE: we are making an assumption about how everything is axis-aligned
+		// NOTE: it works in *this* case, but if the motor was rotated, would be broken
 		const topTorqueValue = topTorque.x;
 		const bottomTorqueValue = bottomTorque.x;
 
