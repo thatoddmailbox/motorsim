@@ -172,11 +172,6 @@ export default class BrushHolder {
 		const topForce = lengthDirections[0].multiplyScalar(length * current).cross(magneticFieldVector);
 		const bottomForce = lengthDirections[1].multiplyScalar(length * current).cross(magneticFieldVector);
 
-		// find the force directions for displaying the vectors
-		const topForceDirection = topForce.clone().normalize();
-		const bottomForceDirection = bottomForce.clone().normalize();
-		this.armature.setForceDirections(topForce.length() != 0 && topForceDirection, bottomForce.length() != 0 && bottomForceDirection, this.angle);
-
 		// now we have the force, prepare to find torque
 		// we need to find the lever arm first
 		const [ topX, topY ] = this.armature.getTopPositions(this.angle);
@@ -212,6 +207,11 @@ export default class BrushHolder {
 
 		// now we have updated the angular veloctiy, we can change the angle
 		this.setAngle(this.angle + this.angularVelocity*dt);
+
+		// update force vectors
+		const topForceDirection = topForce.clone().normalize();
+		const bottomForceDirection = bottomForce.clone().normalize();
+		this.armature.setForceDirections(topForce.length() != 0 && topForceDirection, bottomForce.length() != 0 && bottomForceDirection, this.angle);
 
 		// report data to the main app
 		if (this.parameters.dataCallback) {
